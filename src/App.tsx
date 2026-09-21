@@ -214,7 +214,17 @@ export default function App() {
     setFocus(null);
   };
   const chooseEnsemble = (id: string) => {
-    setFilters((f) => ({ ...f, ensemble: id }));
+    setFilters({
+      q: "",
+      district: "",
+      category: "",
+      ensemble: id,
+      quarter: "",
+      from: 1000,
+      to: 2026,
+      unknown: true,
+      box: null,
+    });
     const e = ensembles.find((e) => e.id === id);
     const rs = entries.filter((r) => e?.members.includes(r.id) && r.bounds);
     if (rs.length) {

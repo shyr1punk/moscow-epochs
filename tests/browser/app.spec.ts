@@ -129,3 +129,16 @@ test("optional agent tools validate inputs and update the visible search", async
   );
   expect(results.total).toBe(1);
 });
+
+test("open ensemble clears restrictive search and shows every member", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByLabel("Поиск по названию или адресу").fill("Назаровская");
+  await expect(page.locator(".result-card")).toHaveCount(1);
+  await page.locator(".result-card").click();
+  await page.getByRole("button", { name: "Показать участников" }).click();
+  await expect(page).toHaveURL(/ensemble=/);
+  await expect(page.locator(".result-card")).toHaveCount(8);
+  await expect(page.getByLabel("Поиск по названию или адресу")).toHaveValue("");
+});
