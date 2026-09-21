@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-21T19:51:09.554Z",
+  "sources": [
+    {
+      "downloadUrl": "https://data.mos.ru/api/v2/odata/MEDIA/getFile?id=04e81cf1-07cc-46a3-a6bc-27a05df501b9",
+      "datasetId": 530,
+      "url": "https://data.mos.ru/opendata/530",
+      "version": 10,
+      "release": 573,
+      "updated": "18.09.2026 21:00:35",
+      "records": 7016,
+      "sha256": "5ecdbb3d59edcd2f67305e31466d9f5cbca58e63caeab75460f29806cea43699"
+    },
+    {
+      "downloadUrl": "https://data.mos.ru/api/v2/odata/MEDIA/getFile?id=858d579c-fe73-4afa-bc14-50601c796be0",
+      "datasetId": 60562,
+      "url": "https://data.mos.ru/opendata/60562",
+      "version": 4,
+      "release": 87,
+      "updated": "20.09.2026 09:00:56",
+      "records": 556482,
+      "sha256": "9cc48722e5e0da5e0d0a6faac98996d6a52df7c134eb421093c2f2b5518e28a3"
+    },
+    {
+      "downloadUrl": "https://data.mos.ru/api/v2/odata/MEDIA/getFile?id=a88b6aef-ba5d-4313-b970-660afb5cdf59",
+      "datasetId": 64068,
+      "url": "https://data.mos.ru/opendata/64068",
+      "version": 1,
+      "release": 21,
+      "updated": "11.08.2026 15:01:07",
+      "records": 5694,
+      "sha256": "1f67984a3b508f0e9b6c25cea0a1096afa87c6ad33593dfabc2532aef5fd4726"
+    }
+  ],
+  "counts": {
+    "total": 7016,
+    "uniqueSourceIds": 7014,
+    "duplicateIdentifiers": 2,
+    "quarters": 995,
+    "quarterMembers": 6990,
+    "polygons": 6978,
+    "points": 38,
+    "withoutGeometry": 0,
+    "dated": 1998,
+    "multiple": 2387,
+    "unknown": 2631,
+    "ensembles": 698,
+    "ensembleMembers": 4288,
+    "addressMatched": 3973,
+    "addressFallbacks": 4,
+    "invalidGeometries": 9
+  },
+  "quarterMode": "official-and-rectangle",
+  "quarterNote": "Набор №64068 — современные учётные кварталы; отбор по центру геометрии объекта. Они не обозначают исторические границы. Для произвольной территории используется выделение области.",
+  "methodology": {
+    "dateRole": "Датировка из названия; не гарантированный год постройки",
+    "approximation": "Начало века: первые 33 года; середина: следующие 33; конец: оставшиеся. Половины: по 50 лет.",
+    "ensembles": "Совпадение названия и адресного контекста (УНОМ или улица) при расстоянии менее 2 км; либо менее 250 м в одном районе. Минимум два участника."
+  }
+}
