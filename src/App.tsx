@@ -484,7 +484,9 @@ export default function App() {
                     {r.address || r.district}
                   </span>
                   <span className="result-bottom">
-                    {r.ensembleId ? (
+                    {r.geometryKind === "none" ? (
+                      <>Без координат</>
+                    ) : r.ensembleId ? (
                       <>
                         <Layers size={12} /> В составе ансамбля
                       </>
@@ -738,7 +740,9 @@ export default function App() {
                   <p className="small-muted">
                     {detail.geometryKind === "polygon"
                       ? "Полигон из реестра"
-                      : "Точечное расположение"}
+                      : detail.geometryKind === "point"
+                        ? "Точечное расположение"
+                        : "Координаты отсутствуют в источнике"}
                     {detail.geometrySource === "60562"
                       ? " · Уточнено по адресному реестру"
                       : ""}
