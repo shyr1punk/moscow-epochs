@@ -142,3 +142,50 @@ test("open ensemble clears restrictive search and shows every member", async ({
   await expect(page.locator(".result-card")).toHaveCount(8);
   await expect(page.getByLabel("Поиск по названию или адресу")).toHaveValue("");
 });
+
+test("shared year axis follows epochs, keyboard handles and URL", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await expect(page.locator(".result-card")).toHaveCount(40);
+  const start = page.getByRole("slider", { name: "Начало периода" });
+  const end = page.getByRole("slider", { name: "Конец периода" });
+  await page.getByRole("button", { name: "XIX век", exact: true }).click();
+  await expect(start).toHaveValue("1800");
+  await expect(end).toHaveValue("1899");
+  await start.focus();
+  await page.keyboard.press("ArrowRight");
+  await end.focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(start).toHaveValue("1801");
+  await expect(end).toHaveValue("1898");
+  await expect(page).toHaveURL(/from=1801&to=1898/);
+  await page.reload();
+  await expect(start).toHaveValue("1801");
+  await expect(end).toHaveValue("1898");
+  await expect(page.locator(".year-histogram rect").first()).toBeAttached();
+  await page.screenshot({ path: "/tmp/moscow-range-desktop.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "1900–1917", exact: true }).click();
+  await expect(start).toHaveValue("1900");
+  await expect(end).toHaveValue("1917");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({ path: "/tmp/moscow-range-mobile.png" });
+  const track = (await page.locator(".dual-range-track").boundingBox())!;
+  const handleX = (year: number) =>
+    track.x + ((year - 1000) / 1026) * track.width;
+  await page.mouse.move(handleX(1900), track.y + 4 - 7);
+  await page.mouse.down();
+  await page.mouse.move(handleX(1800), track.y + 4 - 7, { steps: 8 });
+  await page.mouse.up();
+  expect(Number(await start.inputValue())).toBeLessThan(1850);
+  await page.mouse.move(handleX(1917), track.y + 4 + 7);
+  await page.mouse.down();
+  await page.mouse.move(handleX(2000), track.y + 4 + 7, { steps: 8 });
+  await page.mouse.up();
+  expect(Number(await end.inputValue())).toBeGreaterThan(1950);
+});

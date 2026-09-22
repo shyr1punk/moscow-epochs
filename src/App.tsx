@@ -1,3 +1,4 @@
+import YearRange from "./YearRange";
 import { useEffect, useMemo, useRef, useState, useDeferredValue } from "react";
 import {
   Search,
@@ -65,6 +66,20 @@ export default function App() {
   const [mobileFilters, setMobileFilters] = useState(false),
     [limit, setLimit] = useState(40),
     [copied, setCopied] = useState(false);
+  const timeline = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = timeline.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => {
+      const bottom = Number.parseFloat(getComputedStyle(element).bottom) || 0;
+      element.parentElement?.style.setProperty(
+        "--timeline-clearance",
+        `${element.getBoundingClientRect().height + bottom + 16}px`,
+      );
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   const about = useRef<HTMLDialogElement>(null);
   const detailCache = useRef(new Map<number, Record<string, Detail>>());
   const dataBase = manifest ? `${BASE}data/snapshots/${manifest.snapshot}` : "";
@@ -558,7 +573,10 @@ export default function App() {
           <SlidersHorizontal size={18} /> Найти объект{" "}
           <span>{number(visible.length)}</span>
         </button>
-        <div className={`timeline ${current ? "with-detail" : ""}`}>
+        <div
+          ref={timeline}
+          className={`timeline ${current ? "with-detail" : ""}`}
+        >
           <div className="timeline-top">
             <div>
               <span className="eyebrow">ДАТИРОВКА ОБЪЕКТОВ</span>
@@ -592,36 +610,12 @@ export default function App() {
               Все эпохи
             </button>
           </div>
-          <div className="range-pair">
-            <label>
-              <span>
-                От {filters.from === 1000 ? "ранних дат" : filters.from}
-              </span>
-              <input
-                aria-label="Начало периода"
-                type="range"
-                min="1000"
-                max="2026"
-                value={filters.from}
-                onChange={(e) =>
-                  set("from", Math.min(+e.target.value, filters.to))
-                }
-              />
-            </label>
-            <label>
-              <span>До {filters.to}</span>
-              <input
-                aria-label="Конец периода"
-                type="range"
-                min="1000"
-                max="2026"
-                value={filters.to}
-                onChange={(e) =>
-                  set("to", Math.max(+e.target.value, filters.from))
-                }
-              />
-            </label>
-          </div>
+          <YearRange
+            entries={entries}
+            from={filters.from}
+            to={filters.to}
+            onChange={(from, to) => setFilters((f) => ({ ...f, from, to }))}
+          />
           <div className="epoch-legend">
             {EPOCHS.slice(0, 7).map((e) => (
               <button
